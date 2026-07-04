@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astraia | Your Cosmic Birthmark</title>
+    <style>
+        body { font-family: 'Georgia', serif; background: #0a0a16; color: #f4f4f9; text-align: center; padding: 2rem; margin: 0; }
+        .container { max-width: 600px; margin: 2rem auto; background: #121225; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: 2px; color: #e2b714; }
+        p.subtitle { font-style: italic; color: #a0a0bd; margin-bottom: 2rem; }
+        input[type="date"] { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #1a1a3a; color: #fff; font-size: 1rem; width: 80%; margin-bottom: 1.5rem; outline: none; }
+        button { background: #e2b714; color: #0a0a16; border: none; padding: 12px 30px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #fff; }
+        #preview { margin-top: 3rem; display: none; }
+        #nasaImage { width: 100%; border-radius: 12px; margin-top: 1rem; box-shadow: 0 4px 20px rgba(226,183,20,0.2); }
+        #storyText { text-align: left; line-height: 1.8; margin-top: 2rem; font-size: 1.1rem; color: #e0e0f0; white-space: pre-line; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ASTRAIA</h1>
+    <p class="subtitle">Discover what the universe was creating the day you were born.</p>
+    
+    <input type="date" id="birthdate">
+    <br>
+    <button onclick="revealCosmos()">Reveal My Cosmic Story</button>
+
+    <div id="preview">
+        <h2 id="astroTitle" style="color: #e2b714; margin-top: 1.5rem;"></h2>
+        <img id="nasaImage" src="" alt="Cosmic Event">
+        <div id="storyText"></div>
+    </div>
+</div>
+
+<script>
+    async function revealCosmos() {
+        const dateInput = document.getElementById('birthdate').value;
+        if (!dateInput) return alert("Please select a date first!");
+
+        const btn = document.querySelector('button');
+        btn.innerText = "Consulting the Stars...";
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('/api/generate-cosmic', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_date: dateInput })
+            });
+            
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+
+            document.getElementById('astroTitle').innerText = data.title;
+            document.getElementById('nasaImage').src = data.imageUrl;
+            document.getElementById('storyText').innerText = data.story;
+            document.getElementById('preview').style.display = 'block';
+
+        } catch (err) {
+            alert("The cosmic currents are busy. Error: " + err.message);
+        } finally {
+            btn.innerText = "Reveal My Cosmic Story";
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
