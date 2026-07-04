@@ -45,8 +45,8 @@
         <h1 style="font-size: 1.8rem; margin-bottom: 0px; color: #e2b714; letter-spacing: 3px;">ASTRAIA</h1>
         <p style="font-size: 0.85rem; font-style: italic; margin-top: 4px; color: #a0a0bd;">A Personalized Keepsake From the Stars</p>
         <h2 id="astroTitle" style="color: #e2b714; margin-top: 1.5rem;"></h2>
-        <!-- Added crossorigin attribute to prevent empty canvas renders -->
-        <img id="nasaImage" src="" alt="Cosmic Event" crossorigin="anonymous">
+        <!-- Removed crossorigin="anonymous" to fix the broken image display on screen -->
+        <img id="nasaImage" src="" alt="Cosmic Event">
         <div id="storyText"></div>
     </div>
 
@@ -126,26 +126,25 @@
 
     // Fixed PDF Printer engine function
     function downloadPoster() {
-    const element = document.getElementById('preview');
-    const selectedDate = document.getElementById('birthdate').value || 'cosmic-story';
-    const img = document.getElementById('nasaImage');
+        const element = document.getElementById('preview');
+        const selectedDate = document.getElementById('birthdate').value || 'cosmic-story';
 
-    // Force the options to render cleanly
-    const options = {
-        margin:       10,
-        filename:     `astraia-${selectedDate}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { 
-            scale: 2, 
-            useCORS: true, 
-            allowTaint: true, // Allows rendering even if CORS headers are missing
-            backgroundColor: '#121225' 
-        }, 
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    
-    html2pdf().from(element).set(options).save();
-}
+        // Force options to render cleanly using allowTaint
+        const options = {
+            margin:       10,
+            filename:     `astraia-${selectedDate}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { 
+                scale: 2, 
+                useCORS: false,    // Set to false since NASA doesn't support CORS headers
+                allowTaint: true,  // Forces compilation of the canvas even with unauthenticated external image URLs
+                backgroundColor: '#121225' 
+            }, 
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        
+        html2pdf().from(element).set(options).save();
+    }
 </script>
 
 </body>
