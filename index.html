@@ -45,7 +45,8 @@
         <h1 style="font-size: 1.8rem; margin-bottom: 0px; color: #e2b714; letter-spacing: 3px;">ASTRAIA</h1>
         <p style="font-size: 0.85rem; font-style: italic; margin-top: 4px; color: #a0a0bd;">A Personalized Keepsake From the Stars</p>
         <h2 id="astroTitle" style="color: #e2b714; margin-top: 1.5rem;"></h2>
-        <img id="nasaImage" src="" alt="Cosmic Event">
+        <!-- Added crossorigin attribute to prevent empty canvas renders -->
+        <img id="nasaImage" src="" alt="Cosmic Event" crossorigin="anonymous">
         <div id="storyText"></div>
     </div>
 
@@ -110,7 +111,7 @@
             document.getElementById('nasaImage').src = data.imageUrl;
             document.getElementById('storyText').innerText = data.story;
             
-            // Show the story block, the download button, and tip links altogether smoothly
+            // Show elements altogether smoothly
             document.getElementById('preview').style.display = 'block';
             document.getElementById('actionArea').style.display = 'flex';
             document.getElementById('tipArea').style.display = 'block';
@@ -123,20 +124,24 @@
         }
     }
 
-    // PDF Printer function engine
+    // Fixed PDF Printer engine function
     function downloadPoster() {
         const element = document.getElementById('preview');
         const selectedDate = document.getElementById('birthdate').value || 'cosmic-story';
         
         const options = {
-            margin:       12,
+            margin:       10,
             filename:     `astraia-${selectedDate}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#121225' }, 
+            html2canvas:  { 
+                scale: 2, 
+                useCORS: true, 
+                allowTaint: false,
+                backgroundColor: '#121225' 
+            }, 
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         
-        // Triggers instant background processing and file extraction
         html2pdf().from(element).set(options).save();
     }
 </script>
