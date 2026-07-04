@@ -4,17 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astraia | Your Cosmic Birthmark</title>
+    <!-- Include the HTML to PDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { font-family: 'Georgia', serif; background: #0a0a16; color: #f4f4f9; text-align: center; padding: 2rem; margin: 0; }
         .container { max-width: 600px; margin: 2rem auto; background: #121225; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         h1 { font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: 2px; color: #e2b714; }
         p.subtitle { font-style: italic; color: #a0a0bd; margin-bottom: 2rem; }
         input[type="date"] { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #1a1a3a; color: #fff; font-size: 1rem; width: 80%; margin-bottom: 1.5rem; outline: none; }
+        
+        /* Button Styles */
         button { background: #e2b714; color: #0a0a16; border: none; padding: 12px 30px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         button:hover { background: #fff; }
-        #preview { margin-top: 3rem; display: none; }
+        
+        /* Printable Poster Container styling */
+        #preview { margin-top: 3rem; display: none; background: #121225; padding: 20px; border: 2px solid #e2b714; border-radius: 12px; }
         #nasaImage { width: 100%; border-radius: 12px; margin-top: 1rem; box-shadow: 0 4px 20px rgba(226,183,20,0.2); }
         #storyText { text-align: left; line-height: 1.8; margin-top: 2rem; font-size: 1.1rem; color: #e0e0f0; white-space: pre-line; }
+        
+        /* Action buttons & Tip Panel layout */
+        .download-wrapper { margin-top: 25px; display: flex; justify-content: center; }
+        .download-btn { background: #ffffff; color: #0a0a16; border: 2px solid #e2b714; }
+        .download-btn:hover { background: #e2b714; color: #0a0a16; }
+        
+        .donation-container { text-align: center; margin: 40px auto 10px auto; border-top: 1px dashed #e2b714; padding-top: 25px; display: none; }
     </style>
 </head>
 <body>
@@ -27,10 +40,50 @@
     <br>
     <button onclick="revealCosmos()">Reveal My Cosmic Story</button>
 
+    <!-- This whole container is what gets saved into the PDF -->
     <div id="preview">
+        <h1 style="font-size: 1.8rem; margin-bottom: 0px; color: #e2b714; letter-spacing: 3px;">ASTRAIA</h1>
+        <p style="font-size: 0.85rem; font-style: italic; margin-top: 4px; color: #a0a0bd;">A Personalized Keepsake From the Stars</p>
         <h2 id="astroTitle" style="color: #e2b714; margin-top: 1.5rem;"></h2>
         <img id="nasaImage" src="" alt="Cosmic Event">
         <div id="storyText"></div>
+    </div>
+
+    <!-- Interactive Download Button (Hidden until results are ready) -->
+    <div class="download-wrapper" id="actionArea" style="display: none;">
+        <button class="download-btn" onclick="downloadPoster()">📥 Download Premium PDF Certificate</button>
+    </div>
+
+    <!-- Tipping System Setup (Hidden until results are ready) -->
+    <div class="donation-container" id="tipArea">
+        <p style="color: #e0e0e0; font-size: 1rem; margin-bottom: 6px; letter-spacing: 1px;">✨ Support Astraia ✨</p>
+        <p style="color: #a0a0bd; font-size: 0.85rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
+            This tool is free to use! If your cosmic card brought a smile to your face, consider buying the creator a coffee.
+        </p>
+        
+        <div style="display: flex; justify-content: center; align-items: center; gap: 25px; flex-wrap: wrap;">
+            
+            <!-- UPI Tipping Block (India) -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <a href="upi://pay?pa=makanksha578@okhdfcbank&pn=Astraia%20Cosmic&cu=INR" style="background: #e2b714; color: #0a0a16; padding: 10px 18px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.85rem; display: inline-flex; align-items: center; box-shadow: 0 4px 10px rgba(226,183,20,0.2);">
+                    💸 UPI Link (Mobile)
+                </a>
+                <!-- Live generated scannable QR Code block -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=upi://pay?pa=makanksha578@okhdfcbank%26pn=Astraia%2520Cosmic%26cu=INR" alt="Scan to Tip via UPI" style="border: 4px solid #ffffff; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); width: 110px; height: 110px;" />
+                <span style="color: #a0a0bd; font-size: 0.75rem;">Scan with GPay / PhonePe</span>
+            </div>
+
+            <!-- Vertical Separator Line -->
+            <div style="width: 1px; height: 120px; background: rgba(226,183,20,0.3);"></div>
+
+            <!-- PayPal Tipping Block (Global) -->
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <a href="https://paypal.me/AKANKSHAMAURYAIN" target="_blank" style="background: #0070ba; color: #ffffff; padding: 10px 18px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.85rem; display: inline-flex; align-items: center; box-shadow: 0 4px 10px rgba(0,112,186,0.2); margin-bottom: 50px;">
+                    🔷 Global PayPal Link
+                </a>
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -56,7 +109,11 @@
             document.getElementById('astroTitle').innerText = data.title;
             document.getElementById('nasaImage').src = data.imageUrl;
             document.getElementById('storyText').innerText = data.story;
+            
+            // Show the story block, the download button, and tip links altogether smoothly
             document.getElementById('preview').style.display = 'block';
+            document.getElementById('actionArea').style.display = 'flex';
+            document.getElementById('tipArea').style.display = 'block';
 
         } catch (err) {
             alert("The cosmic currents are busy. Error: " + err.message);
@@ -64,6 +121,23 @@
             btn.innerText = "Reveal My Cosmic Story";
             btn.disabled = false;
         }
+    }
+
+    // PDF Printer function engine
+    function downloadPoster() {
+        const element = document.getElementById('preview');
+        const selectedDate = document.getElementById('birthdate').value || 'cosmic-story';
+        
+        const options = {
+            margin:       12,
+            filename:     `astraia-${selectedDate}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#121225' }, 
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        
+        // Triggers instant background processing and file extraction
+        html2pdf().from(element).set(options).save();
     }
 </script>
 
