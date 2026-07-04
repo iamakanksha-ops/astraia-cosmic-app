@@ -126,24 +126,26 @@
 
     // Fixed PDF Printer engine function
     function downloadPoster() {
-        const element = document.getElementById('preview');
-        const selectedDate = document.getElementById('birthdate').value || 'cosmic-story';
-        
-        const options = {
-            margin:       10,
-            filename:     `astraia-${selectedDate}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { 
-                scale: 2, 
-                useCORS: true, 
-                allowTaint: false,
-                backgroundColor: '#121225' 
-            }, 
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        
-        html2pdf().from(element).set(options).save();
-    }
+    const element = document.getElementById('preview');
+    const selectedDate = document.getElementById('birthdate').value || 'cosmic-story';
+    const img = document.getElementById('nasaImage');
+
+    // Force the options to render cleanly
+    const options = {
+        margin:       10,
+        filename:     `astraia-${selectedDate}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { 
+            scale: 2, 
+            useCORS: true, 
+            allowTaint: true, // Allows rendering even if CORS headers are missing
+            backgroundColor: '#121225' 
+        }, 
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    
+    html2pdf().from(element).set(options).save();
+}
 </script>
 
 </body>
